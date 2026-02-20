@@ -48,7 +48,7 @@ export default function Home() {
               <Button variant="ghost">Sign In</Button>
             </Link>
             <Link href="/register">
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl">Get Started</Button>
+              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl">Sign Up</Button>
             </Link>
             <ThemeToggle />
           </div>
