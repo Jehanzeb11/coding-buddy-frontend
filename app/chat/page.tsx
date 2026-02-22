@@ -168,13 +168,14 @@ export default function ChatPage() {
                   className="flex items-center gap-3"
                 >
                   <Input
+                
                     value={input}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
                     placeholder="Describe a bug, paste code, or ask for suggestions..."
-                    className="flex-1 py-4 rounded-full"
+                    className="flex-1 rounded-xl py-4 h-12" style={{ fontSize: "1rem" }}
                   />
-                  <Button type="submit" className="flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 shadow-2xl">
-                    <Send className="h-4 w-4" />
+                  <Button type="submit" className=" w-12 h-12 flex items-center gap-2 px-5 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 shadow-2xl">
+                     <Send className="h-5 w-5 size-5" />
                   </Button>
                 </form>
               </div>
