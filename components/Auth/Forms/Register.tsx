@@ -10,10 +10,13 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AuthImage from "@/app/assets/auth.png";
+import { useRouter } from "next/navigation";
 
-const RegisterForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+const RegisterForm: React.FC = () => {
+    const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -22,10 +25,10 @@ const RegisterForm = () => {
   } = useForm<RegisterInputs>();
   const password = watch("password");
   const onSubmit: SubmitHandler<RegisterInputs> = (data: RegisterInputs) =>
-    console.log(data);
+    router.push(`/chat`);
 
   return (
-    <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white">
+  <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
       <div className="flex flex-col md:flex-row">
         {/* Image Section - Left */}
         <div className="flex-1 flex items-center justify-center">
@@ -40,23 +43,20 @@ const RegisterForm = () => {
         </div>
 
         {/* Form Section - Right */}
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-8 bg-white dark:bg-transparent">
           <div className="max-w-md mx-auto">
             <div className="space-y-4 mb-8">
-              <CardTitle className="text-2xl font-bold text-center text-gray-900">
+              <CardTitle className="text-2xl font-bold text-center dark:text-[#e6eef8]">
                 Create Account
               </CardTitle>
-              <CardDescription className="text-center text-gray-600">
+              <CardDescription className="text-center dark:text-[#cfe6ff]">
                 Enter your information to create your account
               </CardDescription>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label
-                  htmlFor="username"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
+                <Label htmlFor="username" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
                   <User className="h-4 w-4" />
                   Username
                 </Label>
@@ -96,10 +96,7 @@ const RegisterForm = () => {
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
+                <Label htmlFor="email" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
                   <Mail className="h-4 w-4" />
                   Email Address
                 </Label>
@@ -131,10 +128,7 @@ const RegisterForm = () => {
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="password"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
+                <Label htmlFor="password" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
                   <Lock className="h-4 w-4" />
                   Password
                 </Label>
@@ -170,9 +164,9 @@ const RegisterForm = () => {
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500" />
+                      <EyeOff className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-500" />
+                      <Eye className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
                     )}
                   </Button>
                 </div>
@@ -187,10 +181,7 @@ const RegisterForm = () => {
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="confirmPassword"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
+                <Label htmlFor="confirmPassword" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
                   <Lock className="h-4 w-4" />
                   Confirm Password
                 </Label>
@@ -218,9 +209,9 @@ const RegisterForm = () => {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500" />
+                      <EyeOff className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-500" />
+                      <Eye className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
                     )}
                   </Button>
                 </div>
@@ -243,17 +234,17 @@ const RegisterForm = () => {
               Create Account <ArrowRight className="ml-2 h-4 w-4" />
             </Button> */}
 
-            <Button size="sm" type="submit" onClick={handleSubmit(onSubmit)} className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full">
+            <Button size="sm" type="submit" onClick={handleSubmit(onSubmit)} className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full">
                 <span className="transition-all duration-300 group-hover:mr-1">Create Account</span> 
                 <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />
               </Button>
 
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-[#cfe6ff]">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                  className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors dark:text-[#9b7cf8] dark:hover:text-[#d4b9ff]"
                 >
                   Sign in
                 </Link>

@@ -3,7 +3,7 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { ArrowRight } from 'lucide-react'
 
-const CTA = ({ ctaRef }: { ctaRef: React.RefObject<HTMLDivElement | null> }) => {
+const CTA: React.FC<{ ctaRef: React.RefObject<HTMLDivElement | null> }> = ({ ctaRef }) => {
   return (
    <section ref={ctaRef} className="py-20 px-4 transition-all duration-1000 ease-out">
         <div className="container mx-auto text-center max-w-4xl">
