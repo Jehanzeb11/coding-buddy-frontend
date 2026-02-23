@@ -137,7 +137,7 @@ export default function ChatPage() {
                    <div key={m.id} className={`max-w-[80%] ${m.role === "user" ? "ml-auto text-right" : "mr-auto text-left"}`}>
                       {m.role === "user" ? (
                         <div
-                          className="inline-block rounded-3xl px-6 py-4 text-base font-medium leading-snug shadow-md whitespace-pre-wrap bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6]"
+                          className="text-white inline-block rounded-3xl px-6 py-4 text-base font-medium leading-snug shadow-md whitespace-pre-wrap bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6]"
                         >
                           {m.isCode ? (
                             <pre className="bg-transparent text-sm overflow-auto rounded font-mono"><code>{m.text}</code></pre>
