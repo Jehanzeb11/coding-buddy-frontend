@@ -1,8 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Code, Lightbulb, Wrench, MessageCircle, Zap, Shield, ArrowRight } from "lucide-react"
+import { Code } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useRef } from "react"
 import Hero from "@/components/Home/Hero"
@@ -59,7 +58,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <Hero observerRef={observerRef}/>
+      <Hero observerRef={observerRef} />
 
       {/* Features Section */}
       <Features featuresRef={featuresRef} />
