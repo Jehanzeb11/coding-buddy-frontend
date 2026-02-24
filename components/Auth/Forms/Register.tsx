@@ -11,24 +11,43 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthImage from "@/app/assets/auth.png";
 import { useRouter } from "next/navigation";
+import { useRegister } from "@/hooks/useRegister";
+import { toast } from "sonner";
+import { RegisterResponse, RegisterError } from "@/types/Form";
 
 const RegisterForm: React.FC = () => {
-    const router = useRouter();
+  const router = useRouter();
+  const registerMutation = useRegister();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegisterInputs>();
   const password = watch("password");
-  const onSubmit: SubmitHandler<RegisterInputs> = (data: RegisterInputs) =>
-    router.push(`/chat`);
+
+  const onSubmit: SubmitHandler<RegisterInputs> = async (data: RegisterInputs) => {
+    const { confirmPassword, ...userData } = data;
+
+    registerMutation.mutate(userData, {
+      onSuccess: (response: RegisterResponse) => {
+        toast.success(response.message);
+        // setTimeout(()=>{
+        //   router.push('/login');
+        // }, 2000)
+      },
+      onError: (error: RegisterError) => {
+        toast.error(error.message || "Registration failed. Please try again.");
+      }
+    });
+  };
 
   return (
-  <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
+    <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
       <div className="flex flex-col md:flex-row">
         {/* Image Section - Left */}
         <div className="flex-1 flex items-center justify-center">
@@ -56,7 +75,10 @@ const RegisterForm: React.FC = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
+                <Label
+                  htmlFor="username"
+                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                >
                   <User className="h-4 w-4" />
                   Username
                 </Label>
@@ -96,7 +118,10 @@ const RegisterForm: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                >
                   <Mail className="h-4 w-4" />
                   Email Address
                 </Label>
@@ -128,7 +153,10 @@ const RegisterForm: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                >
                   <Lock className="h-4 w-4" />
                   Password
                 </Label>
@@ -181,7 +209,10 @@ const RegisterForm: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]">
+                <Label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                >
                   <Lock className="h-4 w-4" />
                   Confirm Password
                 </Label>
@@ -226,18 +257,20 @@ const RegisterForm: React.FC = () => {
               </div>
             </form>
 
-            {/* <Button
+            <Button
+              size="sm"
               type="submit"
-              className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
+              disabled={registerMutation.isPending || isSubmitting}
               onClick={handleSubmit(onSubmit)}
+              className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account <ArrowRight className="ml-2 h-4 w-4" />
-            </Button> */}
-
-            <Button size="sm" type="submit" onClick={handleSubmit(onSubmit)} className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full">
-                <span className="transition-all duration-300 group-hover:mr-1">Create Account</span> 
+              <span className="transition-all duration-300 group-hover:mr-1">
+                {registerMutation.isPending || isSubmitting ? "Creating Account..." : "Create Account"}
+              </span>
+              {!registerMutation.isPending && !isSubmitting && (
                 <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />
-              </Button>
+              )}
+            </Button>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-[#cfe6ff]">
