@@ -30,19 +30,22 @@ const RegisterForm: React.FC = () => {
   } = useForm<RegisterInputs>();
   const password = watch("password");
 
-  const onSubmit: SubmitHandler<RegisterInputs> = async (data: RegisterInputs) => {
+  const onSubmit: SubmitHandler<RegisterInputs> = async (
+    data: RegisterInputs,
+  ) => {
     const { confirmPassword, ...userData } = data;
 
     registerMutation.mutate(userData, {
       onSuccess: (response: RegisterResponse) => {
+
         toast.success(response.message);
-        // setTimeout(()=>{
-        //   router.push('/login');
-        // }, 2000)
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       },
       onError: (error: RegisterError) => {
         toast.error(error.message || "Registration failed. Please try again.");
-      }
+      },
     });
   };
 
@@ -265,7 +268,9 @@ const RegisterForm: React.FC = () => {
               className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="transition-all duration-300 group-hover:mr-1">
-                {registerMutation.isPending || isSubmitting ? "Creating Account..." : "Create Account"}
+                {registerMutation.isPending || isSubmitting
+                  ? "Creating Account..."
+                  : "Create Account"}
               </span>
               {!registerMutation.isPending && !isSubmitting && (
                 <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />

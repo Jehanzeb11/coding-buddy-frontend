@@ -10,6 +10,11 @@ export type LoginInputs = {
   password: string;
 };
 
+export type LoginResponse = {
+  data?: unknown;
+  message: string;
+};
+
 export type RegisterResponse = {
   data: {
     id: number;
@@ -22,6 +27,11 @@ export type RegisterResponse = {
 };
 
 export type RegisterError = {
+  message: string;
+  field?: string;
+};
+
+export type LoginError = {
   message: string;
   field?: string;
 };

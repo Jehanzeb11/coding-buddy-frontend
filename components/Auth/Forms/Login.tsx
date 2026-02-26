@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { LoginInputs } from "@/types/Form";
+import { LoginInputs, LoginResponse } from "@/types/Form";
 import { ArrowRight, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
@@ -11,20 +11,34 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthImage from "@/app/assets/auth.png";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useLogin } from "@/hooks/useLogin";
 
 const LoginForm: React.FC = () => {
 
   const router = useRouter();
+  const loginMutation = useLogin();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginInputs>();
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data: LoginInputs) =>
-    router.push(`/chat`);
+  const onSubmit: SubmitHandler<LoginInputs> = (data: LoginInputs) =>{
+    loginMutation.mutate(data, {
+      onSuccess: (response: LoginResponse) => {
+        toast.success(response.message || "Login successful");
+        setTimeout(() => {
+          router.push(`/chat`);
+        }, 2000);
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || "Login failed. Please try again.");
+      },
+    });
+  }
 
   return (
   <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
@@ -134,22 +148,24 @@ const LoginForm: React.FC = () => {
               </div>
             </form>
 
-            {/* <Button
+             <Button
+              size="sm"
               type="submit"
-              className="w-full mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white border-0  font-medium py-3 shadow-lg hover:shadow-xl transition-all duration-200"
+              disabled={loginMutation.isPending || isSubmitting}
               onClick={handleSubmit(onSubmit)}
+              className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In <ArrowRight className="ml-2 h-4 w-4" />
-            </Button> */}
-
-             <Button size="sm" type="submit" onClick={handleSubmit(onSubmit)} className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full">
-                <span className="transition-all duration-300 group-hover:mr-1">Sign In</span> 
+              <span className="transition-all duration-300 group-hover:mr-1">
+                {loginMutation.isPending || isSubmitting ? "Signing In..." : "Sign In"}
+              </span>
+              {!loginMutation.isPending && !isSubmitting && (
                 <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />
-              </Button>
+              )}
+            </Button>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-[#cfe6ff]">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
                   href="/register"
                   className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors dark:text-[#9b7cf8] dark:hover:text-[#d4b9ff]"
