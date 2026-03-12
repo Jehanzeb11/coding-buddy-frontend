@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { LoginInputs, LoginResponse } from "@/types/Form";
+import { LoginInputs } from "@/types/Form";
 import { ArrowRight, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
@@ -12,36 +12,39 @@ import Image from "next/image";
 import AuthImage from "@/app/assets/auth.png";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useLogin } from "@/hooks/useLogin";
+import { loginAction } from "@/app/actions/auth";
 
 const LoginForm: React.FC = () => {
-
   const router = useRouter();
-  const loginMutation = useLogin();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginInputs>();
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data: LoginInputs) =>{
-    loginMutation.mutate(data, {
-      onSuccess: (response: LoginResponse) => {
-        toast.success(response.message || "Login successful");
-        setTimeout(() => {
-          router.push(`/chat`);
-        }, 2000);
-      },
-      onError: (error: Error) => {
-        toast.error(error.message || "Login failed. Please try again.");
-      },
-    });
-  }
+  const onSubmit: SubmitHandler<LoginInputs> = async (data: LoginInputs) => {
+    setIsPending(true);
+    const result = await loginAction(data);
+    setIsPending(false);
+
+    if (result.success) {
+      toast.success(result.message);
+      // Brief delay for the toast before navigating
+      setTimeout(() => {
+        router.push("/chat");
+        router.refresh(); // Refresh the server-side state (including cookies)
+      }, 1000);
+    } else {
+      toast.error(result.message);
+    }
+  };
 
   return (
-  <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
+    <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
       <div className="flex flex-col md:flex-row">
         {/* Image Section - Left */}
         <div className="flex-1 h-full flex items-center justify-center">
@@ -50,8 +53,9 @@ const LoginForm: React.FC = () => {
             alt="Authentication"
             width={1000}
             height={1000}
-            objectFit="cover"
-            className="h-full"
+            priority
+            className="h-full object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
 
@@ -148,17 +152,17 @@ const LoginForm: React.FC = () => {
               </div>
             </form>
 
-             <Button
+            <Button
               size="sm"
               type="submit"
-              disabled={loginMutation.isPending || isSubmitting}
+              disabled={isPending || isSubmitting}
               onClick={handleSubmit(onSubmit)}
               className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="transition-all duration-300 group-hover:mr-1">
-                {loginMutation.isPending || isSubmitting ? "Signing In..." : "Sign In"}
+                {isPending || isSubmitting ? "Signing In..." : "Sign In"}
               </span>
-              {!loginMutation.isPending && !isSubmitting && (
+              {!isPending && !isSubmitting && (
                 <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />
               )}
             </Button>

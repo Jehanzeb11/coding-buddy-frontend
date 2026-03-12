@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
@@ -14,8 +14,38 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Code Buddy",
-  description: "Your AI Coding Assistant",
+  title: {
+    default: "CodeBuddy | Your AI Coding Partner",
+    template: "%s | CodeBuddy",
+  },
+  description: "Get intelligent code suggestions, instant bug fixes, and expert technical assistance. Level up your development with AI-powered guidance.",
+  keywords: ["AI Coding", "Developer Tools", "Programming Assistant", "CodeBuddy"],
+  authors: [{ name: "CodeBuddy Team" }],
+  creator: "CodeBuddy",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://codebuddy.ai",
+    title: "CodeBuddy | Your AI Coding Partner",
+    description: "Intelligent code suggestions and expert technical assistance.",
+    siteName: "CodeBuddy",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CodeBuddy | Your AI Coding Partner",
+    description: "Intelligent code suggestions and expert technical assistance.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "#071024" },
+  ],
 };
 
 export default function RootLayout({
@@ -27,6 +57,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Providers>
           {children}

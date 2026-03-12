@@ -11,17 +11,17 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthImage from "@/app/assets/auth.png";
 import { useRouter } from "next/navigation";
-import { useRegister } from "@/hooks/useRegister";
 import { toast } from "sonner";
-import { RegisterResponse, RegisterError } from "@/types/Form";
+import { registerAction } from "@/app/actions/auth";
 
 const RegisterForm: React.FC = () => {
   const router = useRouter();
-  const registerMutation = useRegister();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -35,18 +35,18 @@ const RegisterForm: React.FC = () => {
   ) => {
     const { confirmPassword, ...userData } = data;
 
-    registerMutation.mutate(userData, {
-      onSuccess: (response: RegisterResponse) => {
+    setIsPending(true);
+    const result = await registerAction(userData);
+    setIsPending(false);
 
-        toast.success(response.message);
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
-      },
-      onError: (error: RegisterError) => {
-        toast.error(error.message || "Registration failed. Please try again.");
-      },
-    });
+    if (result.success) {
+      toast.success(result.message);
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (
@@ -59,8 +59,9 @@ const RegisterForm: React.FC = () => {
             alt="Authentication"
             width={1000}
             height={1000}
-            objectFit="cover"
-            className="h-full"
+            priority
+            className="h-full object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
 
@@ -263,16 +264,16 @@ const RegisterForm: React.FC = () => {
             <Button
               size="sm"
               type="submit"
-              disabled={registerMutation.isPending || isSubmitting}
+              disabled={isPending || isSubmitting}
               onClick={handleSubmit(onSubmit)}
               className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="transition-all duration-300 group-hover:mr-1">
-                {registerMutation.isPending || isSubmitting
+                {isPending || isSubmitting
                   ? "Creating Account..."
                   : "Create Account"}
               </span>
-              {!registerMutation.isPending && !isSubmitting && (
+              {!isPending && !isSubmitting && (
                 <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />
               )}
             </Button>

@@ -11,6 +11,7 @@ export type LoginInputs = {
 };
 
 export type LoginResponse = {
+  token: string;
   data?: unknown;
   message: string;
 };
