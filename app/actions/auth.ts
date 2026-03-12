@@ -2,13 +2,14 @@
 
 import { ENDPOINTS } from "@/lib/endpoints";
 import { LoginInputs, LoginResponse } from "@/types/Form";
+import api from "@/lib/api-client";
 import axios from "axios";
 import { createSession, deleteSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export async function loginAction(credentials: LoginInputs) {
   try {
-    const response = await axios.post(ENDPOINTS.LOGIN, credentials);
+    const response = await api.post(ENDPOINTS.LOGIN, credentials);
 
     // Some APIs return token, some return accessToken, some return it inside a 'user' object
     const token = response.data.token || response.data.accessToken || response.data.data?.token;
@@ -32,17 +33,23 @@ export async function loginAction(credentials: LoginInputs) {
     return { success: true, message: response.data.message || "Welcome back!" };
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
-      console.error("Login Axios Error:", {
+      console.error("Auth Axios Error:", {
         status: error.response?.status,
-        statusText: error.response?.statusText,
         data: error.response?.data,
         message: error.message
       });
 
+      if (error.response?.status === 500) {
+        return {
+          success: false,
+          message: "Internal Server Error (500). Our servers are having trouble, please try again later."
+        };
+      }
+
       const data: any = error.response?.data;
       return {
         success: false,
-        message: data?.error?.message || data?.message || error.message || "Login request failed"
+        message: data?.error?.message || data?.message || error.message || "Request failed"
       };
     }
 
@@ -56,17 +63,26 @@ export async function loginAction(credentials: LoginInputs) {
 
 export async function registerAction(credentials: any) {
   try {
-    const response = await axios.post(ENDPOINTS.REGISTER, credentials);
+    const response = await api.post(ENDPOINTS.REGISTER, credentials);
     return { success: true, message: response.data.message || "Registration successful!" };
-  } catch (error) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
+      console.error("Register Axios Error:", error.response?.status, error.response?.data);
+      
+      if (error.response?.status === 500) {
+        return {
+          success: false,
+          message: "Internal Server Error (500). Please try again later."
+        };
+      }
+
       const data: any = error.response?.data;
       return {
         success: false,
         message: data?.error?.message || data?.message || "Registration failed"
       };
     }
-    return { success: false, message: "An unexpected error occurred" };
+    return { success: false, message: error.message || "An unexpected error occurred" };
   }
 }
 
