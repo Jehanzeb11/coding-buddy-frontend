@@ -11,18 +11,18 @@ export default async function Navbar() {
   const { isAuth } = await verifySession();
 
   return (
-    <header className="border-b bg-linear-to-r from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 shadow-sm sticky top-0 z-50 backdrop-blur-md bg-opacity-80 h-24">
-      <div className="container mx-auto px-4 h-full flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group transition-all duration-300">
+    <header className="fixed left-0 right-0 top-4 z-50 w-[95%] max-w-7xl mx-auto h-20 rounded-2xl border border-white/40 dark:border-white/10 bg-white/10 dark:bg-black/10 backdrop-blur-3xl backdrop-saturate-200 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-300">
+      <div className="px-6 md:px-8 h-full flex justify-between items-center">
+        <Link href="/" className="flex items-center gap-2 group transition-all duration-300 hover:opacity-80">
           <div className="flex items-center">
             <Image
               src={Logo}
               alt="CodeBuddy Logo"
-              width={180}
-              height={60}
+              width={160}
+              height={50}
               priority
               quality={100}
-              className="object-contain w-auto h-18"
+              className="object-contain w-auto h-12 md:h-14 drop-shadow-sm"
             />
           </div>
         </Link>
