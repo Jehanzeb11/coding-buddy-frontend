@@ -33,7 +33,7 @@ export default async function Navbar() {
                 <Button variant="ghost" size="sm">Sign In</Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl">Sign Up</Button>
+                <Button size="sm" className="bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg shadow-md hover:shadow-indigo-500/25 dark:shadow-violet-500/20 dark:hover:shadow-violet-500/40 transition-all duration-300">Sign Up</Button>
               </Link>
             </>
           ) : (

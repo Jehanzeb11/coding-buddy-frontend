@@ -50,40 +50,42 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto shadow-lg rounded-lg overflow-hidden bg-white dark:bg-[#071024] dark:shadow-[0_20px_40px_rgba(7,18,36,0.7)] border border-transparent dark:border-neutral-800">
-      <div className="flex flex-col md:flex-row">
-        {/* Image Section - Left */}
-        <div className="flex-1 flex items-center justify-center">
-          <Image
-            src={AuthImage}
-            alt="Authentication"
-            width={1000}
-            height={1000}
-            priority
-            className="h-full object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+    <div className="w-full max-w-5xl mx-auto shadow-2xl dark:shadow-none rounded-2xl overflow-hidden bg-white/90 dark:bg-white/5 dark:backdrop-blur-2xl border border-gray-200 dark:border-white/10 relative mt-8 lg:mt-0">
+      <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 dark:from-violet-500/5 dark:via-transparent dark:to-fuchsia-500/5 pointer-events-none" />
+      <div className="flex flex-col md:flex-row relative z-10">
+        {/* Image Section - Left (Hidden on very small screens or given proper padding) */}
+        <div className="flex-1 flex items-center justify-center p-6 md:p-8 lg:p-12">
+          <div className="relative w-full aspect-square max-w-md mx-auto hidden md:block">
+            <Image
+              src={AuthImage}
+              alt="Authentication"
+              fill
+              priority
+              className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
         </div>
 
         {/* Form Section - Right */}
-        <div className="flex-1 p-8 bg-white dark:bg-transparent">
-          <div className="max-w-md mx-auto">
+        <div className="flex-1 p-8 md:p-12 bg-white/50 dark:bg-black/20 backdrop-blur-sm border-l border-gray-100 dark:border-white/5 flex flex-col justify-center">
+          <div className="max-w-md mx-auto w-full">
             <div className="space-y-4 mb-8">
-              <CardTitle className="text-2xl font-bold text-center dark:text-[#e6eef8]">
+              <CardTitle className="text-3xl font-extrabold text-center text-gray-900 dark:text-white tracking-tight">
                 Create Account
               </CardTitle>
-              <CardDescription className="text-center dark:text-[#cfe6ff]">
-                Enter your information to create your account
+              <CardDescription className="text-center text-base text-gray-500 dark:text-gray-400">
+                Join our community and step up your development
               </CardDescription>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="space-y-2">
                 <Label
                   htmlFor="username"
-                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                  className="text-sm font-medium flex items-center gap-2 text-gray-700 dark:text-gray-300"
                 >
-                  <User className="h-4 w-4" />
+                  <User className="h-4 w-4 text-indigo-500 dark:text-violet-400" />
                   Username
                 </Label>
                 <Input
@@ -105,15 +107,15 @@ const RegisterForm: React.FC = () => {
                         "Username can only contain letters, numbers, and underscores",
                     },
                   })}
-                  className={
+                  className={`h-11 bg-gray-50/50 dark:bg-white/5 border-gray-200 dark:border-white/10 focus-visible:ring-indigo-500 dark:focus-visible:ring-violet-500 rounded-xl transition-all ${
                     errors.username
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      ? "border-red-500 focus-visible:ring-red-500"
                       : ""
-                  }
+                  }`}
                 />
                 {errors.username && (
-                  <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <span className="h-4 w-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs">
+                  <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1.5">
+                    <span className="h-4 w-4 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">
                       !
                     </span>
                     {errors.username.message}
@@ -124,9 +126,9 @@ const RegisterForm: React.FC = () => {
               <div className="space-y-2">
                 <Label
                   htmlFor="email"
-                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                  className="text-sm font-medium flex items-center gap-2 text-gray-700 dark:text-gray-300"
                 >
-                  <Mail className="h-4 w-4" />
+                  <Mail className="h-4 w-4 text-indigo-500 dark:text-violet-400" />
                   Email Address
                 </Label>
                 <Input
@@ -140,15 +142,15 @@ const RegisterForm: React.FC = () => {
                       message: "Please enter a valid email address",
                     },
                   })}
-                  className={
+                  className={`h-11 bg-gray-50/50 dark:bg-white/5 border-gray-200 dark:border-white/10 focus-visible:ring-indigo-500 dark:focus-visible:ring-violet-500 rounded-xl transition-all ${
                     errors.email
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      ? "border-red-500 focus-visible:ring-red-500"
                       : ""
-                  }
+                  }`}
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <span className="h-4 w-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs">
+                  <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1.5">
+                    <span className="h-4 w-4 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">
                       !
                     </span>
                     {errors.email.message}
@@ -159,9 +161,9 @@ const RegisterForm: React.FC = () => {
               <div className="space-y-2">
                 <Label
                   htmlFor="password"
-                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                  className="text-sm font-medium flex items-center gap-2 text-gray-700 dark:text-gray-300"
                 >
-                  <Lock className="h-4 w-4" />
+                  <Lock className="h-4 w-4 text-indigo-500 dark:text-violet-400" />
                   Password
                 </Label>
                 <div className="relative">
@@ -179,32 +181,32 @@ const RegisterForm: React.FC = () => {
                         value:
                           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                         message:
-                          "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+                          "Requires uppercase, lowercase, number, and special character",
                       },
                     })}
-                    className={
+                    className={`h-11 bg-gray-50/50 dark:bg-white/5 border-gray-200 dark:border-white/10 focus-visible:ring-indigo-500 dark:focus-visible:ring-violet-500 rounded-xl transition-all pr-12 ${
                       errors.password
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500 pr-10"
-                        : "pr-10"
-                    }
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }`}
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="absolute right-1 top-1 h-9 w-9 p-0 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-400"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </Button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <span className="h-4 w-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs">
+                  <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1.5">
+                    <span className="h-4 w-4 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">
                       !
                     </span>
                     {errors.password.message}
@@ -215,9 +217,9 @@ const RegisterForm: React.FC = () => {
               <div className="space-y-2">
                 <Label
                   htmlFor="confirmPassword"
-                  className="text-sm font-medium flex items-center gap-2 dark:text-[#cfe6ff]"
+                  className="text-sm font-medium flex items-center gap-2 text-gray-700 dark:text-gray-300"
                 >
-                  <Lock className="h-4 w-4" />
+                  <Lock className="h-4 w-4 text-indigo-500 dark:text-violet-400" />
                   Confirm Password
                 </Label>
                 <div className="relative">
@@ -230,29 +232,29 @@ const RegisterForm: React.FC = () => {
                       validate: (value) =>
                         value === password || "Passwords do not match",
                     })}
-                    className={
+                    className={`h-11 bg-gray-50/50 dark:bg-white/5 border-gray-200 dark:border-white/10 focus-visible:ring-indigo-500 dark:focus-visible:ring-violet-500 rounded-xl transition-all pr-12 ${
                       errors.confirmPassword
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500 pr-10"
-                        : "pr-10"
-                    }
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }`}
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="absolute right-1 top-1 h-9 w-9 p-0 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-400"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-500 dark:text-[#cbd6e8]" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </Button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <span className="h-4 w-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs">
+                  <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1.5">
+                    <span className="h-4 w-4 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">
                       !
                     </span>
                     {errors.confirmPassword.message}
@@ -262,11 +264,11 @@ const RegisterForm: React.FC = () => {
             </form>
 
             <Button
-              size="sm"
+              size="lg"
               type="submit"
               disabled={isPending || isSubmitting}
               onClick={handleSubmit(onSubmit)}
-              className="flex items-center text-sm p-5 mt-6 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 transition-all duration-300 shadow-lg hover:shadow-xl group w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center h-14 mt-8 bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl shadow-xl hover:shadow-indigo-500/25 dark:shadow-violet-500/20 dark:hover:shadow-violet-500/40 transition-all duration-300 hover:-translate-y-0.5 group w-full disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 text-lg font-medium"
             >
               <span className="transition-all duration-300 group-hover:mr-1">
                 {isPending || isSubmitting
@@ -274,16 +276,16 @@ const RegisterForm: React.FC = () => {
                   : "Create Account"}
               </span>
               {!isPending && !isSubmitting && (
-                <ArrowRight className="h-5 w-5 transition-all duration-500 group-hover:translate-x-1" />
+                <ArrowRight className="h-5 w-5 transition-transform duration-500 group-hover:translate-x-1" />
               )}
             </Button>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 dark:text-[#cfe6ff]">
+            <div className="mt-8 text-center pt-6 border-t border-gray-100 dark:border-white/5">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors dark:text-[#9b7cf8] dark:hover:text-[#d4b9ff]"
+                  className="text-indigo-600 hover:text-indigo-700 dark:text-violet-400 dark:hover:text-violet-300 font-semibold transition-colors"
                 >
                   Sign in
                 </Link>

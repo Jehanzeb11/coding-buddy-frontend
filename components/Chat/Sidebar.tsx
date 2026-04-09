@@ -21,11 +21,11 @@ const Sidebar = () => {
         <aside className={`${showSidebar ? "w-80" : "w-0"} hidden md:block transition-all duration-200 overflow-hidden shrink-0 h-[calc(100vh-2rem)]`}>
             <div className="flex flex-col gap-4 h-full">
                 <div className="flex-1 flex flex-col gap-4 overflow-y-auto">
-                    <Button onClick={newChat} className="w-full flex items-center gap-2 justify-center bg-linear-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 shadow-md hover:shadow-lg transition-all">
-                        <Plus className="h-4 w-4" /> New Chat
+                    <Button onClick={newChat} className="w-full flex items-center gap-2 justify-center bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-xl hover:shadow-indigo-500/25 dark:shadow-violet-500/20 dark:hover:shadow-violet-500/40 active:scale-95 transition-all py-6 rounded-2xl font-medium text-base ring-1 ring-white/20 border-0 group">
+                        <Plus className="h-5 w-5" /> New Chat
                     </Button>
 
-                    <Card className="p-0 overflow-hidden bg-background/50 border-neutral-200 dark:border-neutral-800">
+                    <Card className="p-0 overflow-hidden bg-white/60 dark:bg-[#0f172a]/60 backdrop-blur-2xl border-neutral-200/50 dark:border-white/10 shadow-xl ring-1 ring-black/5 dark:ring-white/5 rounded-2xl">
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between mb-3 border-b border-neutral-100 dark:border-neutral-800 pb-2">
                                 <h4 className="font-semibold text-foreground flex items-center gap-2">
@@ -45,7 +45,7 @@ const Sidebar = () => {
                                         <button
                                             key={h.id}
                                             onClick={() => openHistory(h.id)}
-                                            className={`text-left p-2 rounded-lg transition-all text-sm w-full flex items-center gap-2 ${selectedId === h.id ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 font-medium" : "text-muted-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-foreground"}`}
+                                            className={`text-left p-3 rounded-xl transition-all text-sm w-full flex items-center gap-2 ${selectedId === h.id ? "bg-indigo-50/80 text-indigo-700 ring-1 ring-inset ring-indigo-600/20 dark:bg-violet-500/10 dark:text-violet-300 dark:ring-violet-500/30 backdrop-blur-md font-medium" : "text-muted-foreground hover:bg-neutral-100/50 dark:hover:bg-white/5 hover:text-foreground"}`}
                                         >
                                             <div className="truncate">{h.title}</div>
                                         </button>
@@ -59,7 +59,7 @@ const Sidebar = () => {
                 {/* Bottom Section - Settings & Account */}
                 <div className="relative pt-4 border-t border-neutral-200 dark:border-neutral-800 p-2">
                     {showSettings && (
-                        <div className="absolute bottom-full left-2 right-2 mb-2 p-2 bg-white dark:bg-[#0f172a] rounded-xl shadow-2xl border border-neutral-200 dark:border-neutral-800 animate-in slide-in-from-bottom-2 fade-in duration-200 z-50">
+                        <div className="absolute bottom-full left-2 right-2 mb-2 p-2 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-neutral-200/50 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5 animate-in slide-in-from-bottom-2 fade-in duration-200 z-50">
                             <div className="flex flex-col gap-1">
                                 <Button variant="ghost" size="sm" className="justify-start text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400">
                                     <User className="h-4 w-4 mr-2" />
@@ -74,7 +74,7 @@ const Sidebar = () => {
                     <Button 
                         variant="ghost" 
                         onClick={() => setShowSettings(!showSettings)}
-                        className={`w-full justify-start gap-3 p-3 rounded-xl transition-all ${showSettings ? "bg-neutral-100 dark:bg-neutral-800 text-foreground" : "text-muted-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-foreground"}`}
+                        className={`w-full justify-start gap-3 p-4 rounded-2xl transition-all h-auto ${showSettings ? "bg-neutral-100/80 dark:bg-white/10 text-foreground shadow-sm" : "text-muted-foreground hover:bg-neutral-100/50 dark:hover:bg-white/5 hover:text-foreground"}`}
                     >
                         <Settings className={`h-5 w-5 transition-transform duration-500 ${showSettings ? "rotate-90" : ""}`} />
                         <span className="font-medium">Settings</span>

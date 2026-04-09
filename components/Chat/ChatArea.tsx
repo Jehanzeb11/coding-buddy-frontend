@@ -27,7 +27,7 @@ const ChatArea = () => {
 
     return (
         <main className="flex-1 flex flex-col h-full">
-            <div className="flex-1 overflow-hidden rounded-lg border border-border bg-card p-4 flex flex-col h-full">
+            <div className="flex-1 overflow-hidden rounded-2xl border border-neutral-200/50 dark:border-white/10 bg-white/60 dark:bg-[#0f172a]/60 backdrop-blur-2xl shadow-2xl p-4 flex flex-col h-full ring-1 ring-black/5 dark:ring-white/5">
                 <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                         <h3 className="text-xl font-semibold">Coding Buddy</h3>
@@ -42,23 +42,23 @@ const ChatArea = () => {
                 </div>
 
                 <div className="flex-1 overflow-auto mb-4" ref={listRef}>
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 p-1">
                         {messages.map((m) => (
                             <div key={m.id} className={`max-w-[80%] ${m.role === "user" ? "ml-auto text-right" : "mr-auto text-left"}`}>
                                 {m.role === "user" ? (
                                     <div
-                                        className="text-white inline-block rounded-3xl px-6 py-4 text-base font-medium leading-snug shadow-md whitespace-pre-wrap bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6]"
+                                        className="inline-block rounded-2xl rounded-br-sm px-5 py-3 text-[15px] leading-snug whitespace-pre-wrap bg-linear-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/25 dark:shadow-violet-500/30 ring-1 ring-white/20"
                                     >
                                         {m.isCode ? (
-                                            <pre className="bg-transparent text-sm overflow-auto rounded font-mono"><code>{m.text}</code></pre>
+                                            <pre className="bg-black/20 backdrop-blur-md text-[13px] overflow-auto rounded-xl p-3 font-mono border border-white/10 mt-1"><code>{m.text}</code></pre>
                                         ) : (
                                             <div>{m.text}</div>
                                         )}
                                     </div>
                                 ) : (
-                                    <div className="inline-block rounded-2xl px-5 py-4 text-base leading-snug shadow-sm whitespace-pre-wrap bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                                    <div className="inline-block rounded-2xl rounded-bl-sm px-5 py-3 text-[15px] leading-snug shadow-sm whitespace-pre-wrap bg-white/95 dark:bg-[#1e293b]/90 backdrop-blur-xl border border-neutral-200/50 dark:border-white/10 text-gray-900 dark:text-gray-100 ring-1 ring-black/5 dark:ring-white/5">
                                         {m.isCode ? (
-                                            <pre className="rounded-md p-3 font-mono text-sm overflow-auto bg-white text-gray-900 dark:bg-slate-900 dark:text-slate-100"><code>{m.text}</code></pre>
+                                            <pre className="rounded-xl p-3 font-mono text-[13px] overflow-auto bg-gray-50 text-gray-900 dark:bg-[#0f172a] dark:text-gray-100 border border-neutral-200 dark:border-white/10 mt-1 shadow-inner"><code>{m.text}</code></pre>
                                         ) : (
                                             <div>{m.text}</div>
                                         )}
@@ -78,14 +78,13 @@ const ChatArea = () => {
                         className="flex items-center gap-3"
                     >
                         <Input
-
                             value={input}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
                             placeholder="Describe a bug, paste code, or ask for suggestions..."
-                            className="flex-1 rounded-xl py-4 h-12" style={{ fontSize: "1rem" }}
+                            className="flex-1 rounded-xl py-4 h-14 bg-white/80 dark:bg-black/20 dark:backdrop-blur-md border border-neutral-200 dark:border-white/10 focus-visible:ring-indigo-500/50 dark:focus-visible:ring-purple-500/50 transition-all text-base shadow-sm"
                         />
-                        <Button type="submit" className=" w-12 h-12 flex items-center gap-2 px-5 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-[#7c3aed] dark:to-[#8b5cf6] text-white border-0 shadow-2xl">
-                            <Send className="h-5 w-5 size-5" />
+                        <Button type="submit" className="w-14 h-14 flex items-center justify-center rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-xl hover:shadow-indigo-500/25 dark:shadow-violet-500/20 dark:hover:shadow-violet-500/40 active:scale-95 transition-all outline-none border-0 group">
+                            <Send className="h-6 w-6" />
                         </Button>
                     </form>
                 </div>
