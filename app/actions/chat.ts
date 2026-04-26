@@ -25,6 +25,8 @@ export async function createChatAction(title?: string, persona?: string) {
 
     const requestBody: CreateChatRequest = {
       title: title || "New Chat",
+      message: title,
+      prompt: title,
       persona
     };
 
@@ -83,10 +85,20 @@ export async function getChatsAction() {
     const response = await api.get(ENDPOINTS.GET_CHATS);
 
     const chats = response.data.chats || response.data.data || (Array.isArray(response.data) ? response.data : []);
-    const normalizedChats = Array.isArray(chats) ? chats.map((c: any) => ({
-      ...c,
-      id: c.id || c._id
-    })) : [];
+    const normalizedChats = Array.isArray(chats) ? chats.map((c: any) => {
+      const msgs = Array.isArray(c.messages) ? c.messages.map((m: any) => ({
+        ...m,
+        id: m.id || m._id,
+        role: m.role === "bot" ? "ai" : (m.role || "ai"),
+        text: m.text || m.content || ""
+      })) : c.messages;
+
+      return {
+        ...c,
+        id: c.id || c._id,
+        messages: msgs
+      };
+    }) : [];
 
     return { 
       success: true, 
@@ -136,12 +148,20 @@ export async function getChatAction(id: string) {
     const response = await api.get(ENDPOINTS.GET_CHAT(id));
 
     const chatData = response.data.chat || response.data.data || response.data;
+    
+    const normalizedMessages = Array.isArray(chatData.messages) ? chatData.messages.map((m: any) => ({
+      ...m,
+      id: m.id || m._id,
+      role: m.role === "bot" ? "ai" : (m.role || "ai"),
+      text: m.text || m.content || ""
+    })) : chatData.messages;
 
     return { 
       success: true, 
       data: {
         ...chatData,
-        id: chatData.id || chatData._id
+        id: chatData.id || chatData._id,
+        messages: normalizedMessages
       },
       message: response.data.message || "Chat retrieved successfully!" 
     };

@@ -36,7 +36,7 @@ interface ChatStore {
 const initialMessages: Message[] = [
     {
         id: "m1",
-        role: "bot",
+        role: "ai",
         text: "Hi! I'm your coding buddy — share code or describe a problem and I'll suggest fixes or improvements.",
     },
 ];
@@ -66,7 +66,26 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         if (!text.trim()) return;
 
         const { selectedId, messages, selectedPersona } = get();
-        set({ isLoading: true, error: null });
+        
+        const isCode = text.toLowerCase().includes("function") ||
+            text.includes("const ") ||
+            text.includes("=>") ||
+            text.toLowerCase().includes("bug");
+
+        // Optimistic update
+        const optimisticMsg: Message = {
+            id: `temp-${Date.now()}`,
+            role: "user",
+            text,
+            isCode
+        };
+
+        set({ 
+            messages: [...messages, optimisticMsg],
+            input: "", // Clear input immediately for better UX
+            isLoading: true, 
+            error: null 
+        });
 
         try {
             // If no chat is selected, create a new chat first
@@ -84,20 +103,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             }
 
             // Send the message
-            const isCode = text.toLowerCase().includes("function") ||
-                text.includes("const ") ||
-                text.includes("=>") ||
-                text.toLowerCase().includes("bug");
-
             const messageResult = await sendMessageAction(chatId!, { content: text, isCode });
             if (!messageResult.success) {
                 set({ error: messageResult.message, isLoading: false });
                 return;
             }
 
-            // Reload messages to get the updated conversation
+            // Reload messages to get the updated conversation (which will replace the temp message)
             await get().loadChatMessages(chatId!);
-            set({ input: "", isLoading: false });
+            set({ isLoading: false });
 
         } catch (error) {
             set({ error: "Failed to send message", isLoading: false });

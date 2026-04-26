@@ -24,7 +24,8 @@ export async function sendMessageAction(chatId: string, messageData: SendMessage
     }
 
     const response = await api.post(ENDPOINTS.SEND_MESSAGE(chatId), {
-      content: messageData.content,
+      message: messageData.content,
+      content: messageData.content, // Fallback
       isCode: messageData.isCode
     });
 
@@ -34,7 +35,9 @@ export async function sendMessageAction(chatId: string, messageData: SendMessage
       success: true, 
       data: {
         ...msgData,
-        id: msgData.id || msgData._id
+        id: msgData.id || msgData._id,
+        role: msgData.role === "bot" ? "ai" : (msgData.role || "ai"),
+        text: msgData.text || msgData.content || ""
       },
       message: response.data.message || "Message sent successfully!" 
     };
@@ -90,7 +93,9 @@ export async function getMessagesAction(chatId: string) {
     const msgs = response.data.messages || response.data.data || (Array.isArray(response.data) ? response.data : []);
     const normalizedMsgs = Array.isArray(msgs) ? msgs.map((m: any) => ({
       ...m,
-      id: m.id || m._id
+      id: m.id || m._id,
+      role: m.role === "bot" ? "ai" : (m.role || "ai"),
+      text: m.text || m.content || ""
     })) : [];
 
     return { 

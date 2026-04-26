@@ -1,6 +1,6 @@
 export type Message = {
   id: string
-  role: "user" | "bot"
+  role: "user" | "ai"
   text: string
   isCode?: boolean
   chatId?: string
@@ -47,12 +47,15 @@ export type DeleteChatResponse = {
 }
 
 export type SendMessageRequest = {
+  message?: string
   content: string
   isCode?: boolean
 }
 
 export type CreateChatRequest = {
   title: string
+  message?: string
+  prompt?: string
   persona?: string
 }
 
