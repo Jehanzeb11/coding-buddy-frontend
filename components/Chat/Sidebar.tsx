@@ -5,6 +5,7 @@ import { Button } from "../ui/button"
 import { useChatStore } from "@/store/store"
 import LogoutButton from "../layout/LogoutButton"
 import { useState, useEffect } from "react"
+import Link from "next/link"
 
 const Sidebar = () => {
     const [showSettings, setShowSettings] = useState(false);
@@ -79,12 +80,13 @@ const Sidebar = () => {
                                             key={h.id}
                                             className={`group flex items-center gap-1 ${selectedId === h.id ? "bg-indigo-50/80 text-indigo-700 ring-1 ring-inset ring-indigo-600/20 dark:bg-violet-500/10 dark:text-violet-300 dark:ring-violet-500/30 backdrop-blur-md font-medium rounded-xl" : "text-muted-foreground hover:bg-neutral-100/50 dark:hover:bg-white/5 hover:text-foreground rounded-xl"}`}
                                         >
-                                            <button
+                                            <Button
+                                                variant="ghost"
                                                 onClick={() => openHistory(h.id)}
-                                                className="text-left p-3 rounded-xl transition-all text-sm flex-1 flex items-center gap-2"
+                                                className="text-left p-3 rounded-xl transition-all text-sm flex-1 flex items-center gap-2 h-auto justify-start font-normal border-0 hover:bg-transparent"
                                             >
                                                 <div className="truncate">{h.title}</div>
-                                            </button>
+                                            </Button>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -111,10 +113,12 @@ const Sidebar = () => {
                     {showSettings && (
                         <div className="absolute bottom-full left-2 right-2 mb-2 p-2 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-neutral-200/50 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5 animate-in slide-in-from-bottom-2 fade-in duration-200 z-50">
                             <div className="flex flex-col gap-1">
-                                <Button variant="ghost" size="sm" className="justify-start text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400">
-                                    <User className="h-4 w-4 mr-2" />
-                                    Account Settings
-                                </Button>
+                                <Link href="/chat/settings" className="w-full">
+                                    <Button variant="ghost" size="sm" className="w-full justify-start text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400">
+                                        <User className="h-4 w-4 mr-2" />
+                                        Account Settings
+                                    </Button>
+                                </Link>
                                 <div className="h-px bg-neutral-100 dark:bg-neutral-800 my-1" />
                                 <LogoutButton />
                             </div>

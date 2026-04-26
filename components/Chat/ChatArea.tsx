@@ -21,10 +21,19 @@ const ChatArea = () => {
         error,
         selectedId,
         selectedPersona,
-        setSelectedPersona
+        setSelectedPersona,
+        user,
+        loadUser
     } = useChatStore();
 
     const listRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        // Load user info if not already loaded
+        if (!user) {
+            loadUser();
+        }
+    }, [user, loadUser]);
 
     useEffect(() => {
         // autoscroll to bottom when messages update
@@ -32,6 +41,18 @@ const ChatArea = () => {
             listRef.current.scrollTop = listRef.current.scrollHeight
         }
     }, [messages])
+
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        const userData = user?.data || user?.user || user;
+        const name = userData?.username || userData?.name || "there";
+
+        if (hour >= 0 && hour < 5) return `Hey Night Owl, ${name}!`;
+        if (hour < 12) return `Good Morning, ${name} !`;
+        if (hour < 18) return `Good Afternoon, ${name} !`;
+        if (hour < 22) return `Good Evening, ${name} !`;
+        return `Good Night, ${name} !`;
+    };
 
     return (
         <main className="flex-1 flex flex-col h-full">
@@ -64,8 +85,10 @@ const ChatArea = () => {
                             !selectedId ? (
                                 <div className="flex flex-col items-center justify-center py-12 gap-6 animate-in fade-in duration-500">
                                     <div className="text-center space-y-2">
-                                        <h2 className="text-2xl font-bold">Select a Persona</h2>
-                                        <p className="text-muted-foreground">Who would you like to chat with today?</p>
+                                        <h2 className="text-3xl font-bold tracking-tight bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                                            {getGreeting()}
+                                        </h2>
+                                        <p className="text-muted-foreground text-lg">Who would you like to chat with today?</p>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4 max-w-lg w-full">
                                         {[

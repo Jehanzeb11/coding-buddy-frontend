@@ -31,6 +31,8 @@ interface ChatStore {
     loadChatMessages: (chatId: string) => Promise<void>;
     deleteChat: (id: string) => Promise<void>;
     deleteAllChats: () => Promise<void>;
+    user: any | null;
+    loadUser: () => Promise<void>;
 }
 
 const initialMessages: Message[] = [
@@ -50,6 +52,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     isLoading: false,
     error: null,
     selectedPersona: "assistant",
+    user: null,
 
     setMessages: (messages) => set({ messages }),
     setHistory: (history) => set({ history }),
@@ -61,6 +64,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     setIsLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
     setSelectedPersona: (selectedPersona) => set({ selectedPersona }),
+
+    loadUser: async () => {
+        try {
+            const { getUserAction } = await import('@/app/actions/auth');
+            const result = await getUserAction();
+            if (result.success) {
+                set({ user: result.data });
+            }
+        } catch (error) {
+            console.error("Failed to load user:", error);
+        }
+    },
 
     sendMessage: async (text: string) => {
         if (!text.trim()) return;

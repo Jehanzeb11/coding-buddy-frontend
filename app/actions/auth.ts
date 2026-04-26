@@ -68,7 +68,7 @@ export async function registerAction(credentials: any) {
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
       console.error("Register Axios Error:", error.response?.status, error.response?.data);
-      
+
       if (error.response?.status === 500) {
         return {
           success: false,
@@ -80,6 +80,56 @@ export async function registerAction(credentials: any) {
       return {
         success: false,
         message: data?.error?.message || data?.message || "Registration failed"
+      };
+    }
+    return { success: false, message: error.message || "An unexpected error occurred" };
+  }
+}
+
+export async function getUserAction() {
+  try {
+    const response = await api.get(ENDPOINTS.USER);
+    return { success: true, data: response.data };
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      console.error("Get User Axios Error:", error.response?.status, error.response?.data);
+
+      if (error.response?.status === 500) {
+        return {
+          success: false,
+          message: "Internal Server Error (500). Please try again later."
+        };
+      }
+
+      const data: any = error.response?.data;
+      return {
+        success: false,
+        message: data?.error?.message || data?.message || "Get user failed"
+      };
+    }
+    return { success: false, message: error.message || "An unexpected error occurred" };
+  }
+}
+
+export async function updateUserAction(user: any) {
+  try {
+    const response = await api.patch(ENDPOINTS.USER, user);
+    return { success: true, message: response.data.message || "Update successful!" };
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      console.error("Update Axios Error:", error.response?.status, error.response?.data);
+
+      if (error.response?.status === 500) {
+        return {
+          success: false,
+          message: "Internal Server Error (500). Please try again later."
+        };
+      }
+
+      const data: any = error.response?.data;
+      return {
+        success: false,
+        message: data?.error?.message || data?.message || "Update failed"
       };
     }
     return { success: false, message: error.message || "An unexpected error occurred" };

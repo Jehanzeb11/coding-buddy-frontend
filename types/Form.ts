@@ -36,3 +36,11 @@ export type LoginError = {
   message: string;
   field?: string;
 };
+
+export type AccountSettingsInputs = {
+  username?: string;
+  email?: string;
+  currentPassword?: string;
+  password?: string;
+  confirmPassword?: string;
+};
