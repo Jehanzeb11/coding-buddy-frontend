@@ -2,104 +2,12 @@
 import React, { FormEvent, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Send, Maximize2, Minimize2, Loader2, Bot, FileSearch, Bug, BookOpen, Check, Copy } from "lucide-react"
+import { Send, Maximize2, Minimize2, Loader2, Bot, FileSearch, Bug, BookOpen } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useChatStore } from "@/store/store"
-import { useState } from "react"
-
-const ChatSkeleton = () => (
-    <div className="flex flex-col gap-6 animate-pulse w-full">
-        <div className="flex justify-end">
-            <div className="w-[75%] sm:w-[50%] h-20 bg-black/5 dark:bg-white/5 rounded-2xl rounded-br-sm" />
-        </div>
-        <div className="flex justify-start">
-            <div className="w-[85%] sm:w-[65%] h-32 bg-black/5 dark:bg-white/5 rounded-2xl rounded-bl-sm" />
-        </div>
-        <div className="flex justify-end">
-            <div className="w-[60%] sm:w-[40%] h-16 bg-black/5 dark:bg-white/5 rounded-2xl rounded-br-sm" />
-        </div>
-    </div>
-);
-
-const TypingIndicator = () => (
-    <div className="mr-auto text-left max-w-[80%] animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <div className="inline-flex items-center gap-1.5 rounded-2xl rounded-bl-sm px-5 py-4 shadow-sm bg-white/95 dark:bg-[#1e293b]/90 backdrop-blur-xl border border-neutral-200/50 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5">
-            <div className="w-2 h-2 rounded-full bg-indigo-500/60 dark:bg-indigo-400/60 animate-[bounce_1.4s_infinite_.2s]" />
-            <div className="w-2 h-2 rounded-full bg-indigo-500/60 dark:bg-indigo-400/60 animate-[bounce_1.4s_infinite_.4s]" />
-            <div className="w-2 h-2 rounded-full bg-indigo-500/60 dark:bg-indigo-400/60 animate-[bounce_1.4s_infinite_.6s]" />
-        </div>
-    </div>
-);
-
-const CodeBlock = ({ code, language, isUser }: { code: string, language?: string, isUser?: boolean }) => {
-    const [copied, setCopied] = useState(false);
-
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
-    return (
-        <div className={`relative group mt-2 mb-2 rounded-xl overflow-hidden border shadow-inner ${isUser ? 'border-white/20 bg-black/20' : 'border-neutral-200 dark:border-white/10 bg-gray-50 dark:bg-[#0f172a]'}`}>
-            <div className={`flex items-center justify-between px-3 py-1.5 border-b ${isUser ? 'bg-black/20 border-white/10 text-white/70' : 'bg-gray-200/50 dark:bg-white/5 border-neutral-200 dark:border-white/10 text-muted-foreground'}`}>
-                <span className="text-xs font-mono">{language || 'code'}</span>
-                <button
-                    onClick={handleCopy}
-                    className={`flex items-center gap-1 text-xs transition-colors ${isUser ? 'hover:text-white' : 'hover:text-foreground'}`}
-                    title="Copy code"
-                >
-                    {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
-                    {copied ? 'Copied!' : 'Copy'}
-                </button>
-            </div>
-            <pre className={`p-3 overflow-auto text-[13px] font-mono ${isUser ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
-                <code>{code}</code>
-            </pre>
-        </div>
-    );
-};
-
-const MessageContent = ({ text, isCode, isUser }: { text: string, isCode?: boolean, isUser?: boolean }) => {
-    if (!text) return null;
-
-    // If explicitly marked as code, render the whole thing as a code block
-    if (isCode) {
-        return <CodeBlock code={text} isUser={isUser} />;
-    }
-
-    // Parse for markdown code blocks (triple backticks)
-    if (!text.includes('```')) {
-        return <div className="whitespace-pre-wrap">{text}</div>;
-    }
-
-    const parts = text.split(/(```[\s\S]*?```)/g);
-
-    return (
-        <div className="whitespace-pre-wrap">
-            {parts.map((part, index) => {
-                if (part.startsWith('```') && part.endsWith('```')) {
-                    const content = part.slice(3, -3);
-                    const firstNewline = content.indexOf('\n');
-                    let language = '';
-                    let code = content;
-
-                    if (firstNewline !== -1) {
-                        language = content.substring(0, firstNewline).trim();
-                        code = content.substring(firstNewline + 1);
-                        if (language.length > 20 || language.includes(' ')) {
-                            language = '';
-                            code = content;
-                        }
-                    }
-
-                    return <CodeBlock key={index} code={code.trimEnd()} language={language} isUser={isUser} />;
-                }
-                return <span key={index}>{part}</span>;
-            })}
-        </div>
-    );
-};
+import MessageContent from "@/components/Message/Message"
+import TypingIndicator from "@/components/Message/TypingIndicator"
+import ChatSkeleton from "@/components/Chat/ChatSkeleton"
 
 const ChatArea = () => {
     const {
